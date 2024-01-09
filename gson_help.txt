@@ -1,0 +1,97 @@
+exemplo1........................
+
+Gson gson = new Gson();
+
+// Objeto para JSON
+String json = gson.toJson(objetoJava);
+
+// JSON para objeto
+ObjetoJava objeto = gson.fromJson(json, ObjetoJava.class);
+
+
+..............
+
+
+Serialização de uma Lista para JSON:
+
+import com.google.gson.Gson;
+import java.util.Arrays;
+import java.util.List;
+
+public class ExemploGsonLista {
+    public static void main(String[] args) {
+        List<String> lista = Arrays.asList("item1", "item2", "item3");
+
+        Gson gson = new Gson();
+        String json = gson.toJson(lista);
+
+        System.out.println(json);
+    }
+}
+
+.........................
+
+
+Desserialização de JSON para uma Classe Aninhada:
+
+
+import com.google.gson.Gson;
+
+class Pessoa {
+    String nome;
+    int idade;
+}
+
+public class ExemploGsonClasseAninhada {
+    public static void main(String[] args) {
+        String json = "{\"nome\":\"João\",\"idade\":25}";
+
+        Gson gson = new Gson();
+        Pessoa pessoa = gson.fromJson(json, Pessoa.class);
+
+        System.out.println("Nome: " + pessoa.nome);
+        System.out.println("Idade: " + pessoa.idade);
+    }
+}
+
+
+
+................
+
+
+Manipulação de JSON com árvores (JsonElement):
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+public class ExemploGsonArvoreJson {
+    public static void main(String[] args) {
+        String json = "{\"nome\":\"Maria\",\"idade\":30,\"cidades\":[\"São Paulo\",\"Rio de Janeiro\"]}";
+
+        JsonParser parser = new JsonParser();
+        JsonElement elemento = parser.parse(json);
+
+        JsonObject objeto = elemento.getAsJsonObject();
+        String nome = objeto.get("nome").getAsString();
+        int idade = objeto.get("idade").getAsInt();
+        JsonArray cidades = objeto.getAsJsonArray("cidades");
+
+        System.out.println("Nome: " + nome);
+        System.out.println("Idade: " + idade);
+        System.out.println("Cidades: " + cidades);
+    }
+}
+
+
+........
+
+a classe GsonBuilder para configurar a formatação do JSON de forma legível (setPrettyPrinting).
+ Se você quiser uma formatação compacta, pode remover essa parte da configuração.
+
+// Serializar o objeto para JSON
+        Gson gson = new GsonBuilder().setPrettyPrinting().create(); // Configuração para formatar JSON de forma legível
+        String json = gson.toJson(objeto);
+
+........
