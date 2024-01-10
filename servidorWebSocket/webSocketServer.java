@@ -52,25 +52,50 @@ public class webSocketServer extends WebSocketServer {
         //converter json para objeto mensagem
         Gson gson = new Gson();
         messagem msg = gson.fromJson(message, messagem.class);
+
         
 
         System.out.println("Mensagem recebida de " + clientIP + ": " + message);
-
+        
     
         // se a mensagem for de autenticação
-        if (msg.tipo.equals("Login")) {
+        if (msg.destino == "root"){
 
-            //login positivo: criar sessao e mandar msg positiva
+            if (msg.tipo.equals("Login")) {
+                
+                msg.token = autenticarUser(msg.emissor, msg.aux1);
+                //login negativo: mandar msg de erro
+                // aqui pode se fazer log de quantas vezes foi feito o login na conta do usuario
+                // contagens de tentativa de iniciar a sessão etc...
 
-            //login negativo: mandar msg de erro
+                //login positivo: criar sessao e mandar msg positiva
+                // adicionar conexão na lista de conexoes 
+                if (!msg.token.startsWith("00ERROR")){
+                    UserSessao us = new UserSessao;
+                    us.email = msg.emissor;
+                    us.client = conn;
+                    us.sessaoToken = msg.token;
+
+                    conexoes.append(us);
+                }
+                
+            }
+
+            else if (msg.tipo.equals("RetomarSessao")) {
+                //confirmar token dispositivo
+                //caso positivo: criar sessao e mandar msg positiva
+                //caso negativo: mandar msg de erro
+
+                msg.token = retomarSessao(msg.emissor, msg.aux1)
+            }
             
-        }
+            msg.destino = msg.emissor;
+            msg.emissor = "root";
+            msg.aux1 = null;
+            msg.aux2 = null;
 
-        else if (msg.tipo.equals("RetomarSessao")) {
-            //confirmar token dispositivo
-            //caso positivo: criar sessao e mandar msg positiva
-
-            //caso negativo: mandar msg de erro
+            conn.send(gson.toJson(msg))
+            
         }
 
         else if (msg.tipo.equals("msg")) {

@@ -36,6 +36,7 @@ public class users {
 
     public String  autenticarUser(String email, String pw){
         //confirmar se email existe
+        //caso negativo: "00ERRORMAILNOTFOUND"
 
         //converter pw em sha128
         //pw igual a db // confirmar pw
@@ -52,7 +53,7 @@ public class users {
         return sessaoToken;
     }
 
-    public String retomarSessao(WebSocket client, String email, String dispToken){
+    public String retomarSessao(String email, String dispToken){
         // confirmar se email existe
 
         // confirmar se token dispostivo igual

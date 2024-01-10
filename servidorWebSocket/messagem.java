@@ -7,6 +7,6 @@ public class messagem {
     String token;
     String data;
     String msg;
-    String aux1;
+    String aux1; //usar para password, token de dispositivo
     String aux2;
 }
