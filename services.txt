@@ -1,0 +1,15 @@
+LoginServices
+    Login -> Fazer Login
+    RetomarSessao -> RetomarSessao
+    Incricao -> criarUser
+
+    >Errors "00ERROR"
+        00ERROREMAILNOTEXISTS
+        00ERRORMAILORPASSWORDINCORRECT
+        00ERRORTOKENINCORRECT
+        00ERRORNOTUTAMAIL
+        00ERRORNOTPOSSIBLECREATEUSER
+
+
+
+        

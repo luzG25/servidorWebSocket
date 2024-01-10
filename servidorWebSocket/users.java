@@ -15,31 +15,38 @@ public class users {
         String password;
     }
 
-    public boolean criar_user(String nome, String email, String password){
+    public String criar_user(String nome, String email, String password){
         //criar objeto user
         User newUser = new User();
 
         newUser.nome = nome;
 
-        //implementar verificação de dominio para somente '@uta.cv'
+        //implementar verificação de dominio para somente '@uta.cv' !> "00ERRORNOTUTAMAIL"
         newUser.email = email;
         
         //transformar em sha128
         newUser.password = password;
 
+        String sessaoToken = "00ERROR";
+        //try...catch
         //guardar user
+        // caso der erro:
+        sessaoToken = "00ERRORNOTPOSSIBLECREATEUSER"
 
+        
+        
+        //caso positivo criar token de sessao
 
-        return true;
+        return sessaoToken;
 
     }
 
     public String  autenticarUser(String email, String pw){
         //confirmar se email existe
-        //caso negativo: "00ERRORMAILNOTFOUND"
+        //caso negativo: "00ERROREMAILNOTEXISTS"
 
         //converter pw em sha128
-        //pw igual a db // confirmar pw
+        //pw igual a db // confirmar pw // caso contrario "00ERRORMAILORPASSWORDINCORRECT"
 
         //gerar token dispositivo
         //guardar token dispositivo
@@ -54,9 +61,9 @@ public class users {
     }
 
     public String retomarSessao(String email, String dispToken){
-        // confirmar se email existe
+        // confirmar se email existe "00ERROREMAILNOTEXISTS"
 
-        // confirmar se token dispostivo igual
+        // confirmar se token dispostivo igual, > "00ERRORTOKENINCORRECT"
 
         // gerar token de sessao
         String sessaoToken = "";

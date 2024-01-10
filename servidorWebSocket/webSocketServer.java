@@ -59,7 +59,7 @@ public class webSocketServer extends WebSocketServer {
         
     
         // se a mensagem for de autenticação
-        if (msg.destino == "root"){
+        if (msg.destino == "LoginService"){
 
             if (msg.tipo.equals("Login")) {
                 
@@ -69,15 +69,8 @@ public class webSocketServer extends WebSocketServer {
                 // contagens de tentativa de iniciar a sessão etc...
 
                 //login positivo: criar sessao e mandar msg positiva
-                // adicionar conexão na lista de conexoes 
-                if (!msg.token.startsWith("00ERROR")){
-                    UserSessao us = new UserSessao;
-                    us.email = msg.emissor;
-                    us.client = conn;
-                    us.sessaoToken = msg.token;
-
-                    conexoes.append(us);
-                }
+                 
+                
                 
             }
 
@@ -86,7 +79,25 @@ public class webSocketServer extends WebSocketServer {
                 //caso positivo: criar sessao e mandar msg positiva
                 //caso negativo: mandar msg de erro
 
-                msg.token = retomarSessao(msg.emissor, msg.aux1)
+                msg.token = retomarSessao(msg.emissor, msg.aux1);
+                
+                
+            }
+
+            else if (msg.tipo == "Incricao") {
+                //Increver usuario na database
+                msg.token = criar_user(msg.aux2 ,msg.emissor, msg.aux1)
+
+            }
+
+            // adicionar conexão na lista de conexoes
+            if (!msg.token.startsWith("00ERROR")){
+                    UserSessao us = new UserSessao;
+                    us.email = msg.emissor;
+                    us.client = conn;
+                    us.sessaoToken = msg.token;
+
+                    conexoes.append(us);
             }
             
             msg.destino = msg.emissor;
@@ -97,6 +108,8 @@ public class webSocketServer extends WebSocketServer {
             conn.send(gson.toJson(msg))
             
         }
+
+        
 
         else if (msg.tipo.equals("msg")) {
             //se for deste tipo
