@@ -4,7 +4,7 @@ import org.java_websocket.WebSocket;
 
 
 public class users {
-    // em casos de erro, retornar 0 ou "0ERRO:"
+    // em casos de erro, retornar 0 ou "00ERRO:"
 
 
     //*criar classe ou metodo para obter todos os usuarios
