@@ -1,0 +1,29 @@
+{
+    "gdluz@uta.cv" :{
+        "nome":"Gabriel da Luz",
+        "email": "gdluz@uta.cv",
+        "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
+        "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+    },
+
+    "vokafor@uta.cv" :{
+        "nome":"Vanessa Okafor",
+        "email": "vokafor@uta.cv",
+        "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
+        "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+    },
+
+    "edlima@uta.cv" :{
+        "nome":"Elber Lima",
+        "email": "edlima@uta.cv",
+        "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
+        "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+    },
+
+    "rhfortes@uta.cv" :{
+        "nome":"Rodrigo Fortes",
+        "email": "rhfortes@uta.cv",
+        "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
+        "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+    }
+}

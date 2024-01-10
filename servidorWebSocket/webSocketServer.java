@@ -63,7 +63,7 @@ public class webSocketServer extends WebSocketServer {
 
             if (msg.tipo.equals("Login")) {
                 
-                msg.token = autenticarUser(msg.emissor, msg.aux1);
+                msg.token = users.autenticarUser(msg.emissor, msg.aux1);
                 //login negativo: mandar msg de erro
                 // aqui pode se fazer log de quantas vezes foi feito o login na conta do usuario
                 // contagens de tentativa de iniciar a sessão etc...
@@ -79,25 +79,25 @@ public class webSocketServer extends WebSocketServer {
                 //caso positivo: criar sessao e mandar msg positiva
                 //caso negativo: mandar msg de erro
 
-                msg.token = retomarSessao(msg.emissor, msg.aux1);
+                msg.token = users.retomarSessao(msg.emissor, msg.aux1);
                 
                 
             }
 
             else if (msg.tipo == "Incricao") {
                 //Increver usuario na database
-                msg.token = criar_user(msg.aux2 ,msg.emissor, msg.aux1)
+                msg.token = users.criar_user(msg.aux2 ,msg.emissor, msg.aux1);
 
             }
 
             // adicionar conexão na lista de conexoes
             if (!msg.token.startsWith("00ERROR")){
-                    UserSessao us = new UserSessao;
+                    UserSessao us = new UserSessao();
                     us.email = msg.emissor;
                     us.client = conn;
                     us.sessaoToken = msg.token;
 
-                    conexoes.append(us);
+                    conexoes.add(us);
             }
             
             msg.destino = msg.emissor;
@@ -105,7 +105,7 @@ public class webSocketServer extends WebSocketServer {
             msg.aux1 = null;
             msg.aux2 = null;
 
-            conn.send(gson.toJson(msg))
+            conn.send(gson.toJson(msg));
             
         }
 

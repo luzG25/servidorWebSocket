@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
 public class ficheiroHandler {
     
     public static String LoadFile(String caminhoArquivo) {
@@ -17,7 +18,7 @@ public class ficheiroHandler {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return "00ERROR: " + e.toString();
         }
         return conteudo.toString();
     }
