@@ -115,7 +115,8 @@ public class users {
         //transformar em sha
         newUser.pw = Security_handler.gerarSHA(password);
         
-        //TODO: gerar token dispositivo
+        //gerar token dispositivo
+        newUser.tokenDisp = tokenHandler.generateToken(email+nome, 0);
 
         String sessaoToken = "SUCESS";
         
@@ -126,7 +127,8 @@ public class users {
             return "00ERRORNOTPOSSIBLECREATEUSER";
 
         
-        //TODO:caso positivo criar token de sessao
+        //caso positivo criar token de sessao
+        sessaoToken = tokenHandler.generateToken(email, 0);
 
         return sessaoToken;
 
@@ -155,10 +157,11 @@ public class users {
         //pw igual a db // passar para gerar token // caso contrario "00ERRORMAILORPASSWORDINCORRECT"
         if (users.get(email).pw.equals(pw)){
             //TODO:gerar token dispositivo
+
             //TODO:guardar token dispositivo
 
-            //TODO:gerar token de sessão
-            String sessaoToken = "";
+            //gerar token de sessão
+            String sessaoToken = tokenHandler.generateToken(email, 0);
 
             //retornar 
             return sessaoToken;
@@ -191,8 +194,8 @@ public class users {
             //TODO:gerar token dispositivo
             //TODO:guardar token dispositivo
 
-            //TODO:gerar token de sessão
-            String sessaoToken = "";
+            //gerar token de sessão
+            String sessaoToken = tokenHandler.generateToken(email, 0);
 
             //retornar 
             return sessaoToken;

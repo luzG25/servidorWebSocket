@@ -21,6 +21,17 @@ public class webSocketServer extends WebSocketServer {
         String sessaoToken;
     }
 
+    private void addConexao(messagem msg, WebSocket conn){
+        if (!msg.token.startsWith("00ERROR")){
+            UserSessao us = new UserSessao();
+            us.email = msg.emissor;
+            us.client = conn;
+            us.sessaoToken = msg.token;
+
+            conexoes.add(us);
+        }
+    }
+
     List<UserSessao> conexoes = new ArrayList<>();
 
     public webSocketServer(int port) {
@@ -64,52 +75,38 @@ public class webSocketServer extends WebSocketServer {
             if (msg.tipo.equals("Login")) {
                 
                 msg.token = users.autenticarUser(msg.emissor, msg.aux1);
-                //login negativo: mandar msg de erro
+                /// caso o login der negativo, token.startsWith("00ERROR") == TRUE
                 // aqui pode se fazer log de quantas vezes foi feito o login na conta do usuario
                 // contagens de tentativa de iniciar a sessão etc...
 
-                //login positivo: criar sessao e mandar msg positiva
-                 
-                
-                
+                //adicionar conexao na lista de conexoes
+                addConexao(msg, conn);
             }
 
             else if (msg.tipo.equals("RetomarSessao")) {
                 //confirmar token dispositivo
-                //caso positivo: criar sessao e mandar msg positiva
-                //caso negativo: mandar msg de erro
-
                 msg.token = users.retomarSessao(msg.emissor, msg.aux1);
+                // caso o login der negativo, token.startsWith("00ERROR") == TRUE 
                 
-                
+                //adicionar conexao na lista de conexoes
+                addConexao(msg, conn);
             }
 
             else if (msg.tipo == "Incricao") {
                 //Increver usuario na database
                 msg.token = users.criar_user(msg.aux2 ,msg.emissor, msg.aux1);
 
-            }
-
-            // adicionar conexão na lista de conexoes
-            if (!msg.token.startsWith("00ERROR")){
-                    UserSessao us = new UserSessao();
-                    us.email = msg.emissor;
-                    us.client = conn;
-                    us.sessaoToken = msg.token;
-
-                    conexoes.add(us);
+                //adicionar conexão na lista de conexoes
+                addConexao(msg, conn);
             }
             
             msg.destino = msg.emissor;
             msg.emissor = "root";
             msg.aux1 = null;
             msg.aux2 = null;
-
             conn.send(gson.toJson(msg));
             
         }
-
-        
 
         else if (msg.tipo.equals("msg")) {
             //se for deste tipo
@@ -127,6 +124,9 @@ public class webSocketServer extends WebSocketServer {
 
                     conexao.client.send(RedircMsg); // enviar msg ao destino
                 }
+
+                // Redistribuir a mensagem para todos os outros clientes (broadcast)
+                broadcast("Nova mensagem de " + clientIP + ": " + message);
             }
 
             //caso contrario, adicionar na lista de espera
@@ -135,8 +135,7 @@ public class webSocketServer extends WebSocketServer {
             }
         }
 
-        // Redistribuir a mensagem para todos os outros clientes (broadcast)
-        broadcast("Nova mensagem de " + clientIP + ": " + message);
+        
     }
 
     @Override
