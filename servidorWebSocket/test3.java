@@ -1,25 +1,37 @@
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import java.util.Date;
 
-public class TokenGenerator {
+public class JwtUtils {
 
     private static final String SECRET_KEY = "seu_segredo"; // Troque pelo seu próprio segredo
 
+    // Método para gerar um token JWT
     public static String generateToken(String subject, long expirationMillis) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationMillis);
 
-        return Jwts.builder()
-                .setSubject(subject)
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+        return JWT.create()
+                .withSubject(subject)
+                .withIssuedAt(now)
+                .withExpiresAt(expiration)
+                .sign(algorithm);
     }
 
-    public static void main(String[] args) {
-        String token = generateToken("usuario123", 3600000); // Token válido por 1 hora (3600000 milissegundos)
-        System.out.println("Token: " + token);
+    // Método para verificar e obter as informações do token JWT
+    public static Claim verifyToken(String token, String claimKey) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);
+            return decodedJWT.getClaim(claimKey);
+        } catch (JWTDecodeException e) {
+            // A exceção será lançada se o token for inválido
+            return null;
+        }
     }
 }
