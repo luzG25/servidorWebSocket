@@ -15,6 +15,8 @@ import java.util.List;
 
 public class webSocketServer extends WebSocketServer {
 
+    private String serverName = "ROOT";
+
     private class UserSessao {
         String email;
         WebSocket client;
@@ -59,16 +61,15 @@ public class webSocketServer extends WebSocketServer {
 
         //System.out.println("Mensagem recebida de " + clientIP + ": " + message);
 
+        //TODO: Decriptografar mensagem
+
         //ao receber mensgem será em json
         //converter json para objeto mensagem
         Gson gson = new Gson();
         messagem msg = gson.fromJson(message, messagem.class);
 
-        
-
         System.out.println("Mensagem recebida de " + clientIP + ": " + message);
         
-    
         // se a mensagem for de autenticação
         if (msg.destino == "LoginService"){
 
@@ -108,6 +109,40 @@ public class webSocketServer extends WebSocketServer {
             
         }
 
+        //TODO: verificar token -> caso negativo mandar msg erro
+
+        // implementar search no DB
+        else if (msg.tipo.equals("Get")){
+            
+            
+
+            //o query do search estara no msg
+
+            // obter mensagens não entregues
+            if (msg.msg.equals("getMensagens")){
+                ArrayList<messagem> mensagens = listaEspera.pullListaEspera(msg.emissor);
+                
+                if (mensagens.size() > 0){
+                    for (messagem ms: mensagens){
+                        //TODO: criptografar msg
+                        String msString =gson.toJson(ms);
+                        
+                        conn.send(msString);
+                    }
+                        
+                }
+            }
+
+            //TODO: obter todos os contactos 
+
+            //TODO: obter informação de um contacto
+
+            //TODO: fazer pesquisar personalizada 
+            // pelo nome, pelo curso, pela categoria
+
+
+        }
+
         else if (msg.tipo.equals("msg")) {
             //se for deste tipo
             //quer dizer que é mensagem para algum usuario
@@ -122,6 +157,8 @@ public class webSocketServer extends WebSocketServer {
                     // se houver alguma alteração na mensagem enviada, aqui é a linha
                     String RedircMsg = message;
 
+                    //TODO: criptografar mensagem 
+
                     conexao.client.send(RedircMsg); // enviar msg ao destino
                 }
 
@@ -131,7 +168,9 @@ public class webSocketServer extends WebSocketServer {
 
             //caso contrario, adicionar na lista de espera
             if (Ndisponivel) {
-                // implementar lista de espera
+                // guardar na lista de espera
+                listaEspera.addListaEspera(message);
+
             }
         }
 

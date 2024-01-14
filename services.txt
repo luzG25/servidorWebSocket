@@ -12,5 +12,6 @@ LoginServices
         00ERRORMAILEXISTS
 
 
-
+GET:
+--> getMensagens
         
