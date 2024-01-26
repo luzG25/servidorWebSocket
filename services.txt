@@ -14,4 +14,7 @@ LoginServices
 
 GET:
 --> getMensagens
+
+--> GETNAME
+    00ERROR:NOTFOUND
         

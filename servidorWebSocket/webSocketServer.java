@@ -133,7 +133,25 @@ public class webSocketServer extends WebSocketServer {
                 }
             }
 
-            //TODO: obter todos os contactos 
+            //obter nome de um contacto
+            //getName:Fulano  
+            if (msg.msg.equals("GETNAME"))
+            {
+                String email = msg.msg.split(':')[1];
+                String nome = users.getNome(email);
+                
+                messagem Rmsg = new messagem;
+                messagem.emissor = serverName;
+                messagem.tipo = "GETNAME";
+                messagem.destino = msg.emissor;
+                messagem.msg = email + ":" + nome;
+            }
+
+            //TODO: obter todos os contactos
+            else if (msg.msg.equal("GETCONTACTS")) 
+            {
+                //obter todos os contactos
+            }
 
             //TODO: obter informação de um contacto
 
