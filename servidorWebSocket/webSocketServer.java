@@ -76,7 +76,6 @@ public class webSocketServer extends WebSocketServer {
 
             // Redistribuir a mensagem para todos os outros clientes (broadcast)
             broadcast(message);
-            System.out.println(message);
 
             //procurar se o usuario esta disponivel
             boolean Ndisponivel = true;
@@ -132,7 +131,7 @@ public class webSocketServer extends WebSocketServer {
                 msg.token = users.criar_user(msg.aux2 ,msg.emissor, msg.aux1);
 
                 //adicionar conexão na lista de conexoes
-                addConexao(msg, conn);
+                //addConexao(msg, conn);
             }
             
             msg.destino = msg.emissor;
@@ -149,8 +148,6 @@ public class webSocketServer extends WebSocketServer {
         // implementar search no DB
         else if (msg.tipo.equals("Get")){
             
-            
-
             //o query do search estara no msg
 
             // obter mensagens não entregues
@@ -192,7 +189,6 @@ public class webSocketServer extends WebSocketServer {
 
             //TODO: fazer pesquisar personalizada 
             // pelo nome, pelo curso, pela categoria
-
 
         }
 

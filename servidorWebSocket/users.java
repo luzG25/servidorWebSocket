@@ -129,9 +129,9 @@ public class users {
 
         
         //caso positivo criar token de sessao
-        sessaoToken = tokenHandler.generateToken(email, 0);
+        //sessaoToken = tokenHandler.generateToken(email, 0);
 
-        return sessaoToken;
+        return newUser.tokenDisp;
 
     }
 
