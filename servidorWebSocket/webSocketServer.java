@@ -69,9 +69,43 @@ public class webSocketServer extends WebSocketServer {
         messagem msg = gson.fromJson(message, messagem.class);
 
         System.out.println("Mensagem recebida de " + clientIP + ": " + message);
+
+        if (msg.tipo.equals("msg")) {
+            //se for deste tipo
+            //quer dizer que é mensagem para algum usuario
+
+            // Redistribuir a mensagem para todos os outros clientes (broadcast)
+            broadcast(message);
+            System.out.println(message);
+
+            //procurar se o usuario esta disponivel
+            boolean Ndisponivel = true;
+            for (UserSessao conexao: conexoes){
+
+                if (conexao.email.equals(msg.destino)) {
+                    Ndisponivel = false;
+
+                    // se houver alguma alteração na mensagem enviada, aqui é a linha
+                    String RedircMsg = message;
+
+                    //TODO: criptografar mensagem 
+
+                    conexao.client.send(RedircMsg); // enviar msg ao destino
+                }
+
+                
+            }
+
+            //caso contrario, adicionar na lista de espera
+            if (Ndisponivel) {
+                // guardar na lista de espera
+                listaEspera.addListaEspera(message);
+
+            }
+        }
         
         // se a mensagem for de autenticação
-        if (msg.destino == "LoginService"){
+        else if (msg.destino.equals("LoginService")){
 
             if (msg.tipo.equals("Login")) {
                 
@@ -81,7 +115,7 @@ public class webSocketServer extends WebSocketServer {
                 // contagens de tentativa de iniciar a sessão etc...
 
                 //adicionar conexao na lista de conexoes
-                addConexao(msg, conn);
+                //addConexao(msg, conn);
             }
 
             else if (msg.tipo.equals("RetomarSessao")) {
@@ -90,7 +124,7 @@ public class webSocketServer extends WebSocketServer {
                 // caso o login der negativo, token.startsWith("00ERROR") == TRUE 
                 
                 //adicionar conexao na lista de conexoes
-                addConexao(msg, conn);
+                //addConexao(msg, conn);
             }
 
             else if (msg.tipo == "Incricao") {
@@ -106,6 +140,7 @@ public class webSocketServer extends WebSocketServer {
             msg.aux1 = null;
             msg.aux2 = null;
             conn.send(gson.toJson(msg));
+            
             
         }
 
@@ -161,38 +196,7 @@ public class webSocketServer extends WebSocketServer {
 
         }
 
-        else if (msg.tipo.equals("msg")) {
-            //se for deste tipo
-            //quer dizer que é mensagem para algum usuario
-
-            // Redistribuir a mensagem para todos os outros clientes (broadcast)
-            broadcast(message);
-
-            //procurar se o usuario esta disponivel
-            boolean Ndisponivel = true;
-            for (UserSessao conexao: conexoes){
-
-                if (conexao.email.equals(msg.destino)) {
-                    Ndisponivel = false;
-
-                    // se houver alguma alteração na mensagem enviada, aqui é a linha
-                    String RedircMsg = message;
-
-                    //TODO: criptografar mensagem 
-
-                    conexao.client.send(RedircMsg); // enviar msg ao destino
-                }
-
-                
-            }
-
-            //caso contrario, adicionar na lista de espera
-            if (Ndisponivel) {
-                // guardar na lista de espera
-                listaEspera.addListaEspera(message);
-
-            }
-        }
+        
 
         
     }

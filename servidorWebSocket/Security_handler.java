@@ -7,8 +7,9 @@ public class Security_handler {
 
     //Definir o algoritimo de SHA
     //Para melhor segurança utilizar o sha256
-    private static String sha_algoritimo = "SHA-1"; //disponivel o SHA-1, SHA-256
+    private static String sha_algoritimo = "SHA-256"; //disponivel o SHA-1, SHA-256
 
+     
     /* 
     public static void main(String[] args) {
         String palavra = "exemplo";
@@ -16,11 +17,11 @@ public class Security_handler {
         try {
             String sha1Hash = gerarSHA(palavra);
             System.out.println("SHA-1 Hash: " + sha1Hash);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    */
+    } */
+    
 
     public static String gerarSHA(String palavra) {
         MessageDigest md;
