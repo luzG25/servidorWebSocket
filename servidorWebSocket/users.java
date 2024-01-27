@@ -15,7 +15,7 @@ public class users {
     
 
     private static String path_users_db = "./users.json";
-    private static String userDetails_db = "./usersDetails.json"
+    private static String userDetails_db = "./usersDetails.json";
     
     protected static class  User {
         String nome; 
@@ -213,36 +213,33 @@ public class users {
         HashMap<String, User> users;
         try {
             users = allUsers();
-            for (user : users){
-                if (user.email.equals(email)){
-                    return user.nome;
-                }
-            }
+            User user = users.get(email);
+            return user.nome;
+
+            
         } catch (Exception e) {
             //handle exception
             e.printStackTrace();
-            return "00ERRORSERVER: " + e.toString();
-        }
-
-        return "00ERROR:NOTFOUND"
+            return "00ERROR:NOTFOUND";
+      }
     }
 
     // obter contactos 
-    public static String getContacts(){
+    public static void getContacts(){
         //TODO: implementar Usersdetails e procurar informação nele
         HashMap<String, User> users;
         try {
             users = allUsers();
             
-            for (user : users){
+            for (String user : users.keySet()){
                 //TODO: armazenar contacto em um linha csv
-                System.out.println(email + ":" + nome)
+                System.out.println(users.get(user).email + ":" + users.get(user).nome);
             }
 
         } catch (Exception e) {
             //handle exception
             e.printStackTrace();
-            return "00ERRORSERVER: " + e.toString();
+            //return "00ERRORSERVER: " + e.toString();
         }
 
     }
