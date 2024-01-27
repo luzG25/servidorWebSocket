@@ -165,6 +165,9 @@ public class webSocketServer extends WebSocketServer {
             //se for deste tipo
             //quer dizer que é mensagem para algum usuario
 
+            // Redistribuir a mensagem para todos os outros clientes (broadcast)
+            broadcast(message);
+
             //procurar se o usuario esta disponivel
             boolean Ndisponivel = true;
             for (UserSessao conexao: conexoes){
@@ -180,8 +183,7 @@ public class webSocketServer extends WebSocketServer {
                     conexao.client.send(RedircMsg); // enviar msg ao destino
                 }
 
-                // Redistribuir a mensagem para todos os outros clientes (broadcast)
-                broadcast("Nova mensagem de " + clientIP + ": " + message);
+                
             }
 
             //caso contrario, adicionar na lista de espera
