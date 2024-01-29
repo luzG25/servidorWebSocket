@@ -109,6 +109,7 @@ public class webSocketServer extends WebSocketServer {
             if (msg.tipo.equals("Login")) {
                 
                 msg.token = users.autenticarUser(msg.emissor, msg.aux1);
+                msg.aux1 = users.getNome(msg.emissor); // TODO: depois tirar essa informação diretamente de autenticarUser
                 /// caso o login der negativo, token.startsWith("00ERROR") == TRUE
                 // aqui pode se fazer log de quantas vezes foi feito o login na conta do usuario
                 // contagens de tentativa de iniciar a sessão etc...
@@ -126,16 +127,16 @@ public class webSocketServer extends WebSocketServer {
                 //addConexao(msg, conn);
             }
 
-            else if (msg.tipo == "Incricao") {
+            else if (msg.tipo.equals("Incricao")) {
                 //Increver usuario na database
                 msg.token = users.criar_user(msg.aux2 ,msg.emissor, msg.aux1);
-
+                msg.aux1 = msg.aux2;
                 //adicionar conexão na lista de conexoes
                 //addConexao(msg, conn);
             }
             
             msg.destino = msg.emissor;
-            msg.emissor = "root";
+            msg.emissor = "LoginService";
             msg.aux1 = null;
             msg.aux2 = null;
             conn.send(gson.toJson(msg));
@@ -146,7 +147,7 @@ public class webSocketServer extends WebSocketServer {
         //TODO: verificar token -> caso negativo mandar msg erro
 
         // implementar search no DB
-        else if (msg.tipo.equals("Get")){
+        else if (msg.tipo.equals("GET")){
             
             //o query do search estara no msg
 
@@ -167,16 +168,18 @@ public class webSocketServer extends WebSocketServer {
 
             //obter nome de um contacto
             //getName:Fulano  
-            if (msg.msg.equals("GETNAME"))
+            if (msg.msg.startsWith("GETNAME"))
             {
                 String email = msg.msg.split(":")[1];
                 String nome = users.getNome(email);
                 
-                messagem Rmsg = new messagem();
-                Rmsg.emissor = serverName;
-                Rmsg.tipo = "GETNAME";
-                Rmsg.destino = msg.emissor;
-                Rmsg.msg = email + ":" + nome;
+                msg.emissor = serverName;
+                msg.msg = "GETNAME";
+                msg.destino = msg.emissor;
+                msg.aux1 = email;
+                msg.aux2 = nome;
+
+                conn.send(gson.toJson(msg));
             }
 
             //TODO: obter todos os contactos
@@ -190,11 +193,7 @@ public class webSocketServer extends WebSocketServer {
             //TODO: fazer pesquisar personalizada 
             // pelo nome, pelo curso, pela categoria
 
-        }
-
-        
-
-        
+        }       
     }
 
     @Override

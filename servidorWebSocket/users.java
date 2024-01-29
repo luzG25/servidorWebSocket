@@ -165,7 +165,8 @@ public class users {
             String sessaoToken = tokenHandler.generateToken(email, 0);
 
             //retornar 
-            return sessaoToken;
+            //return sessaoToken;
+            return users.get(email).tokenDisp;
 
         } 
 
