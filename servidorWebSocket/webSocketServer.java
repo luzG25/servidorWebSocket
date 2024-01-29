@@ -74,6 +74,13 @@ public class webSocketServer extends WebSocketServer {
             //se for deste tipo
             //quer dizer que é mensagem para algum usuario
 
+            // adicionar hora gmt
+            msg.data = hora.getTimeString();
+            // se for preciso mais alterações na mensagem
+            //
+
+            message = gson.toJson(msg);
+
             // Redistribuir a mensagem para todos os outros clientes (broadcast)
             broadcast(message);
 
@@ -84,12 +91,9 @@ public class webSocketServer extends WebSocketServer {
                 if (conexao.email.equals(msg.destino)) {
                     Ndisponivel = false;
 
-                    // se houver alguma alteração na mensagem enviada, aqui é a linha
-                    String RedircMsg = message;
-
                     //TODO: criptografar mensagem 
 
-                    conexao.client.send(RedircMsg); // enviar msg ao destino
+                    conexao.client.send(message); // enviar msg ao destino
                 }
 
                 
@@ -137,7 +141,6 @@ public class webSocketServer extends WebSocketServer {
             
             msg.destino = msg.emissor;
             msg.emissor = "LoginService";
-            msg.aux1 = null;
             msg.aux2 = null;
             conn.send(gson.toJson(msg));
             
