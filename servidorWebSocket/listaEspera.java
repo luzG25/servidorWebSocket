@@ -8,15 +8,19 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 
 public class listaEspera {
-    private static String listaEsperaDB = "listaEspera.json";
+    private static String listaEsperaDB = "./DATA/tmp/";
+    
+    private static String path(String email) {
+        return listaEsperaDB + destino.substring(0, destino.length() - 3) + ".json";
+    }
 
-    public static void addListaEspera(String msg){
+    public static void addListaEspera(String msg,String destino){
 
         // esta função pega na string msg e guarda no ficheiro
         // guardar de forma LIFO
 
         StringBuilder conteudo = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(listaEsperaDB))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path(destino)))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 conteudo.append(linha);
@@ -27,7 +31,7 @@ public class listaEspera {
         }
 
         String data = msg + "\n" + conteudo.toString();
-        ficheiroHandler.SaveFile(data, listaEsperaDB);
+        ficheiroHandler.SaveFile(data, path(destino));
     }
 
     public static ArrayList<messagem> pullListaEspera(String dest){
@@ -37,16 +41,17 @@ public class listaEspera {
         ArrayList<messagem> mensagens = new ArrayList<>();
         Gson gson = new Gson();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(listaEsperaDB))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path(dest)))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 
                 if (linha.contains(dest)){
                     messagem msg = gson.fromJson(linha, messagem.class);
                     
-                    if (msg.destino.equals(dest))
-                        mensagens.add(msg);
+                    mensagens.add(msg);
                 }
+
+                ficheiroHandler.SaveFile("", path(dest));
             }
         } catch (IOException e) {
             e.printStackTrace();

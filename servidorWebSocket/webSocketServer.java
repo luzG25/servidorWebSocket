@@ -80,28 +80,35 @@ public class webSocketServer extends WebSocketServer {
             //
 
             message = gson.toJson(msg);
-
-            // Redistribuir a mensagem para todos os outros clientes (broadcast)
-            broadcast(message);
-
-            //procurar se o usuario esta disponivel
-            boolean Ndisponivel = true;
-            for (UserSessao conexao: conexoes){
-
-                if (conexao.email.equals(msg.destino)) {
-                    Ndisponivel = false;
-
-                    //TODO: criptografar mensagem 
-
-                    conexao.client.send(message); // enviar msg ao destino
-                }
+            
+            //TODO: criptografar mensagem 
+            
+            if (msg.destino.equals("geral@uta.cv"))
+            {
+                // Redistribuir a mensagem para todos os outros clientes (broadcast)
+                // caso for direcionado para geral@uta.cv
+                broadcast(message); // 
             }
+            //TODO: mensagens de grupo
 
-            //caso contrario, adicionar na lista de espera
-            if (Ndisponivel) {
-                // guardar na lista de espera
-                listaEspera.addListaEspera(message);
+            else {
+                //procurar se o usuario esta disponivel
+                boolean Ndisponivel = true;
+                for (UserSessao conexao: conexoes){
 
+                    if (conexao.email.equals(msg.destino)) {
+                        Ndisponivel = false;
+
+                        conexao.client.send(message); // enviar msg ao destino
+                    }
+                }
+                
+                //caso contrario, adicionar na lista de espera
+                if (Ndisponivel) {
+                    // guardar na lista de espera
+                    listaEspera.addListaEspera(message, msg.destino);
+
+                }
             }
         }
         
@@ -162,7 +169,6 @@ public class webSocketServer extends WebSocketServer {
                         
                         conn.send(msString);
                     }
-                        
                 }
             }
 
