@@ -2,7 +2,9 @@ package servidorWebSocket;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -93,49 +95,70 @@ public class users {
      */
     
 
-    public static String criar_user(String nome, String email, String password, String curso){
+    public static String criar_user(messagem msg){
         //criar objeto user
         User newUser = new User(); //objeto com dados de acesso/seguranca
-        User newUserDets = newUser(); // objeto com dados adicionais
+        
+        //Verificação de caracteres inadequados
+        //esta parte é para verificação
+        // caso algum atributo tiver com caracter que dá problema ao sistema
+        
+        // Lista de caracteres ilegais
+        List<Character> caracteresIlegais = Arrays.asList(':', '#', '/', '$', '%', '&', '*', '+', ';');
+        
+        // Lista de atributos a serem verificados
+        List<String> atributos = Arrays.asList(msg.msg, msg.aux2, msg.emissor);
+        // Verificação de caracteres ilegais
+        for (String atributo : atributos) {
+            for (char caractereIlegal : caracteresIlegais) {
+                if (atributo.contains(String.valueOf(caractereIlegal))) {
+                    return "00ERRORCARACTSINVALID";
+                }
+            }
+        }
 
-        newUser.nome = nome;
-
+        //guardar detalhes
+        User newUserDets = new User(); // objeto com dados adicionais
+        newUserDets.nome = msg.aux2;
+        newUserDets.curso = msg.msg; // se tiver dados adicionais, incorporar elas no atributo msg
+        
+        //transformar em sha
+        newUser.pw = Security_handler.gerarSHA(msg.aux1);
+        
+        //gerar token dispositivo
+        newUser.tokenDisp = tokenHandler.generateToken(newUser.email+newUserDets.nome, 0);
+        
         //TODO:implementar verificação de dominio para somente '@uta.cv' !> "00ERRORNOTUTAMAIL"
         
         //verificar se o email já existe
+        // verificar o ficheiro de segurança
         HashMap<String, User> users;
+        HashMap<String, User> usersDets;
         try {
-            users = allUsers();
+            users = allUsers(path_users_db);
+            usersDets = allUsers(userDetails_db);
         } catch (Exception e) {
             //handle exception
             return "00ERRORSERVER: " + e.toString();
         }
         
         //confirmar se email existe
-        if (users.keySet().contains(email)) {
+        if (users.keySet().contains(msg.emissor)) {
             return "00ERRORMAILEXISTS";
         }
         
 
-        newUser.email = email;
+        newUser.email = msg.emissor;
         
-        //transformar em sha
-        newUser.pw = Security_handler.gerarSHA(password);
-        
-        //gerar token dispositivo
-        newUser.tokenDisp = tokenHandler.generateToken(email+nome, 0);
-
         String sessaoToken = "SUCESS";
         
         //guardar user (dados de acesso)
-        users.put(email, newUser);
-        String rsp = saveUsers(users);
+        users.put(newUser.email, newUser);
+        usersDets.put(newUser.email, newUserDets);
+        String rsp = saveUsers(usersDets, userDetails_db);
+        rsp = saveUsers(users, path_users_db);
         if (rsp.startsWith("00ERROR"))
             return "00ERRORNOTPOSSIBLECREATEUSER";
-
-        //guardar detalhes
-
-
         
         //caso positivo criar token de sessao
         //sessaoToken = tokenHandler.generateToken(email, 0);
@@ -148,7 +171,7 @@ public class users {
         // carregar usuarios
         HashMap<String, User> users;
         try {
-            users = allUsers();
+            users = allUsers(path_users_db);
         } catch (Exception e) {
             //handle exception
             e.printStackTrace();
@@ -187,7 +210,7 @@ public class users {
         // carregar usuarios
         HashMap<String, User> users;
         try {
-            users = allUsers();
+            users = allUsers(path_users_db);
         } catch (Exception e) {
             // handle exception
             e.printStackTrace();
@@ -222,7 +245,7 @@ public class users {
         
         HashMap<String, User> users;
         try {
-            users = allUsers();
+            users = allUsers(userDetails_db);
             User user = users.get(email);
             return user.nome;
 
@@ -235,15 +258,23 @@ public class users {
     }
 
     // obter contactos 
-    public static void getContacts(){
+    public static String getContacts(String emissor){
+        String out = "";
         //TODO: implementar Usersdetails e procurar informação nele
         HashMap<String, User> users;
         try {
-            users = allUsers();
+            users = allUsers(userDetails_db);
             
             for (String user : users.keySet()){
-                //TODO: armazenar contacto em um linha csv
-                System.out.println(users.get(user).email + ":" + users.get(user).nome);
+                //armazenar contacto em um linha separado por ":" e delitado por ";"
+
+                if (!user.equals(emissor)) // obter todos os comentarios, excepto requisitor da busca
+                    out += users.get(user).email + ":" + users.get(user).nome + ":" + users.get(user).curso + ";";
+                
+                System.out.println(users.get(user).email + ":" + users.get(user).nome + ":" + users.get(user).curso);
+
+                // para obter conctato: split("/")
+                //atributos do contacto: split(":")
             }
 
         } catch (Exception e) {
@@ -251,6 +282,8 @@ public class users {
             e.printStackTrace();
             //return "00ERRORSERVER: " + e.toString();
         }
+
+        return out;
 
     }
 

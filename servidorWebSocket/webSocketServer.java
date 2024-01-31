@@ -138,7 +138,7 @@ public class webSocketServer extends WebSocketServer {
 
             else if (msg.tipo.equals("Incricao")) {
                 //Increver usuario na database
-                msg.token = users.criar_user(msg.aux2 ,msg.emissor, msg.aux1);
+                msg.token = users.criar_user(msg);
                 msg.aux1 = msg.aux2;
                 //adicionar conexão na lista de conexoes
                 //addConexao(msg, conn);
@@ -192,6 +192,12 @@ public class webSocketServer extends WebSocketServer {
             else if (msg.msg.equals("GETCONTACTS")) 
             {
                 //obter todos os contactos
+                msg.msg = users.getContacts(msg.emissor); //email:nome:curso;
+                msg.emissor = serverName;
+                msg.aux1 = null;
+                msg.aux2 = null;
+                conn.send(gson.toJson(msg));
+                
             }
 
             //TODO: obter informação de um contacto

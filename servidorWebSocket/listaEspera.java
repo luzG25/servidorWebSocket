@@ -11,7 +11,7 @@ public class listaEspera {
     private static String listaEsperaDB = "./DATA/tmp/";
     
     private static String path(String email) {
-        return listaEsperaDB + destino.substring(0, destino.length() - 3) + ".json";
+        return listaEsperaDB + email.substring(0, email.length() - 3) + ".json";
     }
 
     public static void addListaEspera(String msg,String destino){

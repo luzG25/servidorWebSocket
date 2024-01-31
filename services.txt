@@ -10,6 +10,7 @@ LoginServices
         00ERRORNOTUTAMAIL
         00ERRORNOTPOSSIBLECREATEUSER
         00ERRORMAILEXISTS
+        00ERRORCARACTSINVALID -> caso algum atributo tiver com caracter que dá problema ao sistema
 
 
 GET:
