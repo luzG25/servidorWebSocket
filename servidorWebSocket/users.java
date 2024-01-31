@@ -269,9 +269,8 @@ public class users {
                 //armazenar contacto em um linha separado por ":" e delitado por ";"
 
                 if (!user.equals(emissor)) // obter todos os comentarios, excepto requisitor da busca
-                    out += users.get(user).email + ":" + users.get(user).nome + ":" + users.get(user).curso + ";";
-                
-                System.out.println(users.get(user).email + ":" + users.get(user).nome + ":" + users.get(user).curso);
+                    out += user + ":" + users.get(user).nome + ":" + users.get(user).curso + ";";
+                    //System.out.println(user + ":" + users.get(user).nome + ":" + users.get(user).curso);
 
                 // para obter conctato: split("/")
                 //atributos do contacto: split(":")
