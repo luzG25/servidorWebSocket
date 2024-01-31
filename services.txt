@@ -18,3 +18,8 @@ GET:
 --> GETNAME
     00ERROR:NOTFOUND
         
+
+..........................................
+Erro nos path dos ficheiros DB (.json)
+pode-se configura-los em listaEspera.java, users.java
+escritos como variavel global, e são privadas a essa classe

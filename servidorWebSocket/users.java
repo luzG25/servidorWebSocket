@@ -14,8 +14,8 @@ import com.google.gson.JsonObject;
 public class users {
     
 
-    private static String path_users_db = "./users.json";
-    private static String userDetails_db = "./usersDetails.json";
+    private static String path_users_db = "./DATA/users.json";
+    private static String userDetails_db = "./DATA/usersDetails.json";
     
     protected static class  User {
         String nome; 

@@ -1,0 +1,2 @@
+./DATA/tmp/username@uta
+nesta pasta para armazenar as mensagens em lista de espera
