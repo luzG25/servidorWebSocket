@@ -18,15 +18,20 @@ public class users {
     private static String userDetails_db = "./DATA/usersDetails.json";
     
     protected static class  User {
+        // detalhes de segurança
         String nome; 
         String email;
         String pw;
         String tokenDisp; // token do dispositivo
+
+        // adicionar os atributos/detalhes adicionais de cada usuario
+        String curso;
+        String funcao; 
     }
 
     //metodo para obter todos os usuarios
-    private static HashMap<String, User> allUsers() {
-        String json = ficheiroHandler.LoadFile(path_users_db);
+    private static HashMap<String, User> allUsers(String path) {
+        String json = ficheiroHandler.LoadFile(path);
 
         HashMap<String, User> userList = new HashMap<>();
 
@@ -45,7 +50,7 @@ public class users {
         return userList;
     }
 
-    private static String saveUsers(HashMap<String, User> userList) {
+    private static String saveUsers(HashMap<String, User> userList, String path) {
         // Configurar o GsonBuilder para criar um JsonWriter com formato bonito
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -58,7 +63,7 @@ public class users {
         }
 
         // Escrever o JsonObject em um arquivo usando um JsonWriter
-        try (FileWriter fileWriter = new FileWriter(path_users_db)) {
+        try (FileWriter fileWriter = new FileWriter(path)) {
             gson.toJson(jsonObject, fileWriter);
             System.out.println("JSON gravado com sucesso no arquivo.");
         } catch (IOException e) {
@@ -88,9 +93,10 @@ public class users {
      */
     
 
-    public static String criar_user(String nome, String email, String password){
+    public static String criar_user(String nome, String email, String password, String curso){
         //criar objeto user
-        User newUser = new User();
+        User newUser = new User(); //objeto com dados de acesso/seguranca
+        User newUserDets = newUser(); // objeto com dados adicionais
 
         newUser.nome = nome;
 
@@ -121,11 +127,14 @@ public class users {
 
         String sessaoToken = "SUCESS";
         
-        //guardar user
+        //guardar user (dados de acesso)
         users.put(email, newUser);
         String rsp = saveUsers(users);
         if (rsp.startsWith("00ERROR"))
             return "00ERRORNOTPOSSIBLECREATEUSER";
+
+        //guardar detalhes
+
 
         
         //caso positivo criar token de sessao

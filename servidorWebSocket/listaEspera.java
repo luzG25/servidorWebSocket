@@ -9,16 +9,18 @@ import com.google.gson.Gson;
 
 public class listaEspera {
     private static String listaEsperaDB = "./DATA/tmp/";
+    
+    private static String path(String email) {
+        return listaEsperaDB + destino.substring(0, destino.length() - 3) + ".json";
+    }
 
     public static void addListaEspera(String msg,String destino){
 
         // esta função pega na string msg e guarda no ficheiro
         // guardar de forma LIFO
-        destino = destino.substring(0, destino.length() - 3) + ".json";
-        String path = listaEsperaDB + destino;
 
         StringBuilder conteudo = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path(destino)))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 conteudo.append(linha);
@@ -29,7 +31,7 @@ public class listaEspera {
         }
 
         String data = msg + "\n" + conteudo.toString();
-        ficheiroHandler.SaveFile(data, path);
+        ficheiroHandler.SaveFile(data, path(destino));
     }
 
     public static ArrayList<messagem> pullListaEspera(String dest){
@@ -38,9 +40,8 @@ public class listaEspera {
 
         ArrayList<messagem> mensagens = new ArrayList<>();
         Gson gson = new Gson();
-        String path = listaEsperaDB + destino.substring(0, destino.length() - 3) + ".json";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path(dest)))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 
@@ -50,7 +51,7 @@ public class listaEspera {
                     mensagens.add(msg);
                 }
 
-                ficheiroHandler.SaveFile("", path);
+                ficheiroHandler.SaveFile("", path(dest));
             }
         } catch (IOException e) {
             e.printStackTrace();

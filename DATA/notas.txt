@@ -1,0 +1,27 @@
+-> users.json
+    Ficheiro para guardar dados de usuarios importante
+    dados de acesso ao sistema 
+    -id: email
+    -email
+    -password
+    -tokendisp: Token para indentificar o dispositivo conectado
+    
+..........................................................
+
+-> usersBAK.json
+    backup para users.json, caso o principal pifar durante implementaçao
+
+..............................................
+->userDetails.json
+    Para guardar outros detalhes dos usuarios
+    -id: email
+    -nome
+    -curso
+    -função* // nao implementado na primeira versão
+
+    Também para guardar grupos:
+    id: email -> gerado aleatoriamente "gbsudfgoiwsf@uta.cv"
+    nome -> definido pelo usuario
+    função -> somente para os grupos gerais de aluno, professor, funcionarios (email: "aluno@uta.cv")
+
+    *mas não sera implementado nesta primeira versão
