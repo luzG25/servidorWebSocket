@@ -33,7 +33,7 @@ public class WebSocketClientExample extends WebSocketClient {
 
     public static void main(String[] args) {
         try {
-            URI serverUri = new URI("//192.168.88.10:99"); // Substitua pela URL do seu servidor WebSocket
+            URI serverUri = new URI("//192.168.1.100:99"); // Substitua pela URL do seu servidor WebSocket
 
             WebSocketClientExample client = new WebSocketClientExample(serverUri);
             client.connect();

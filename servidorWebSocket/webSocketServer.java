@@ -95,8 +95,6 @@ public class webSocketServer extends WebSocketServer {
 
                     conexao.client.send(message); // enviar msg ao destino
                 }
-
-                
             }
 
             //caso contrario, adicionar na lista de espera
@@ -143,7 +141,6 @@ public class webSocketServer extends WebSocketServer {
             msg.emissor = "LoginService";
             msg.aux2 = null;
             conn.send(gson.toJson(msg));
-            
             
         }
 
