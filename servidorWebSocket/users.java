@@ -129,8 +129,9 @@ public class users {
         newUser.tokenDisp = tokenHandler.generateToken(newUser.email+newUserDets.nome, 0);
         
         //TODO:implementar verificação de dominio para somente '@uta.cv' !> "00ERRORNOTUTAMAIL"
+
         
-        //verificar se o email já existe
+        //verificar se o email já exist
         // verificar o ficheiro de segurança
         HashMap<String, User> users;
         HashMap<String, User> usersDets;
