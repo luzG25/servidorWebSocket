@@ -34,6 +34,21 @@ public class webSocketServer extends WebSocketServer {
         }
     }
 
+    private void killConexao(WebSocket conn){
+        for (UserSessao conexao: conexoes){
+
+            InetSocketAddress remoteAddress = conexao.client.getRemoteSocketAddress();
+            String conexaoIP = remoteAddress.getAddress().getHostAddress();
+            remoteAddress = conn.getRemoteSocketAddress();
+            String clientIP = remoteAddress.getAddress().getHostAddress();
+            
+            if (conexaoIP.equals(clientIP)) {
+                conexoes.remove(conexao);
+                System.out.println(conexao.email + "-" + clientIP + "-> Fechou a Ligação");
+            }
+        }
+    }
+
     List<UserSessao> conexoes = new ArrayList<>();
 
     public webSocketServer(int port) {
@@ -51,6 +66,7 @@ public class webSocketServer extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         InetSocketAddress remoteAddress = conn.getRemoteSocketAddress();
         String clientIP = remoteAddress.getAddress().getHostAddress();
+        killConexao(conn);
         System.out.println("Conexão fechada: " + clientIP + " Code: " + code + " Reason: " + reason);
     }
 
@@ -165,6 +181,7 @@ public class webSocketServer extends WebSocketServer {
                 if (mensagens.size() > 0){
                     for (messagem ms: mensagens){
                         //TODO: criptografar msg
+                        ms.aux2 = "FROMLISTADEESPERA";
                         String msString =gson.toJson(ms);
                         
                         conn.send(msString);
