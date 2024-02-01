@@ -92,6 +92,7 @@ public class webSocketServer extends WebSocketServer {
 
             // adicionar hora gmt
             msg.data = hora.getTimeString();
+            msg.aux2 = "DM"; // para corrigir erro; TODO: Indetificador de DM ou conversa de grupo
             // se for preciso mais alterações na mensagem
             //
 
@@ -104,10 +105,11 @@ public class webSocketServer extends WebSocketServer {
                 // Redistribuir a mensagem para todos os outros clientes (broadcast)
                 // caso for direcionado para geral@uta.cv
                 broadcast(message); // 
-            }
+            } 
             //TODO: mensagens de grupo
 
             else {
+                broadcast(message); // para fins de text
                 //procurar se o usuario esta disponivel
                 boolean Ndisponivel = true;
                 for (UserSessao conexao: conexoes){
@@ -140,16 +142,16 @@ public class webSocketServer extends WebSocketServer {
                 // contagens de tentativa de iniciar a sessão etc...
 
                 //adicionar conexao na lista de conexoes
-                //addConexao(msg, conn);
+                addConexao(msg, conn);
             }
 
             else if (msg.tipo.equals("RetomarSessao")) {
                 //confirmar token dispositivo
-                msg.token = users.retomarSessao(msg.emissor, msg.aux1);
+                //msg.token = users.retomarSessao(msg.emissor, msg.aux1);
                 // caso o login der negativo, token.startsWith("00ERROR") == TRUE 
                 
                 //adicionar conexao na lista de conexoes
-                //addConexao(msg, conn);
+                addConexao(msg, conn);
             }
 
             else if (msg.tipo.equals("Incricao")) {
@@ -209,11 +211,15 @@ public class webSocketServer extends WebSocketServer {
             else if (msg.msg.equals("GETCONTACTS")) 
             {
                 //obter todos os contactos
+                msg.tipo = msg.msg;
                 msg.msg = users.getContacts(msg.emissor); //email:nome:curso;
+                msg.destino = msg.emissor;
                 msg.emissor = serverName;
                 msg.aux1 = null;
                 msg.aux2 = null;
                 conn.send(gson.toJson(msg));
+                System.out.println(gson.toJson(msg));
+
                 
             }
 
