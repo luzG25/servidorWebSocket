@@ -74,10 +74,18 @@ public class webSocketServer extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         InetSocketAddress remoteAddress = conn.getRemoteSocketAddress();
         String clientIP = remoteAddress.getAddress().getHostAddress();
+        System.out.println(message);
 
         //System.out.println("Mensagem recebida de " + clientIP + ": " + message);
 
         //TODO: Decriptografar mensagem
+        try {
+            message = Security_handler.decrypt(message);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
 
         //ao receber mensgem será em json
         //converter json para objeto mensagem
@@ -117,7 +125,7 @@ public class webSocketServer extends WebSocketServer {
                     if (conexao.email.equals(msg.destino)) {
                         Ndisponivel = false;
 
-                        conexao.client.send(message); // enviar msg ao destino
+                        send(conexao.client, message); // enviar msg ao destino
                     }
                 }
                 
@@ -165,7 +173,7 @@ public class webSocketServer extends WebSocketServer {
             msg.destino = msg.emissor;
             msg.emissor = "LoginService";
             msg.aux2 = null;
-            conn.send(gson.toJson(msg));
+            send(conn, gson.toJson(msg));
             
         }
 
@@ -186,7 +194,7 @@ public class webSocketServer extends WebSocketServer {
                         ms.aux2 = "FROMLISTADEESPERA";
                         String msString =gson.toJson(ms);
                         
-                        conn.send(msString);
+                        send(conn, msString);
                     }
                 }
             }
@@ -204,7 +212,7 @@ public class webSocketServer extends WebSocketServer {
                 msg.aux1 = email;
                 msg.aux2 = nome;
 
-                conn.send(gson.toJson(msg));
+                send(conn, gson.toJson(msg));
             }
 
             //TODO: obter todos os contactos
@@ -217,7 +225,7 @@ public class webSocketServer extends WebSocketServer {
                 msg.emissor = serverName;
                 msg.aux1 = null;
                 msg.aux2 = null;
-                conn.send(gson.toJson(msg));
+                send(conn, gson.toJson(msg));
                 System.out.println(gson.toJson(msg));
 
                 
@@ -241,11 +249,22 @@ public class webSocketServer extends WebSocketServer {
         System.out.println("Servidor WebSocket iniciado na porta " + getPort());
     }
 
+    public void send(WebSocket conn, String msg)
+    {
+        try {
+            msg = Security_handler.encrypt(msg);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        conn.send(msg);
+    }
+
     public void broadcast(String message) {
         Collection<WebSocket> connections = getConnections();
         synchronized (connections) {
             for (WebSocket client : connections) {
-                client.send(message);
+                send(client, message);
             }
         }
     }
