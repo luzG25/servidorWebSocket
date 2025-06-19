@@ -178,6 +178,16 @@ public class webSocketServer extends WebSocketServer {
 
         // TODO: verificar token -> caso negativo mandar msg erro
 
+        else if (msg.tipo.equals("GETDHPARAMS")) {
+            msg.msg = "DHPARAMS"; // email:nome:curso;
+            msg.destino = msg.emissor;
+            msg.emissor = serverName;
+            msg.aux1 = "" + dh.getParamG();
+            msg.aux2 = "" + dh.getParamP();
+            send(conn, gson.toJson(msg));
+            System.out.println(gson.toJson(msg));
+        }
+
         // implementar search no DB
         else if (msg.tipo.equals("GET")) {
 
@@ -222,18 +232,6 @@ public class webSocketServer extends WebSocketServer {
                 msg.emissor = serverName;
                 msg.aux1 = null;
                 msg.aux2 = null;
-                send(conn, gson.toJson(msg));
-                System.out.println(gson.toJson(msg));
-            }
-
-            else if (msg.msg.equals("GETDHPARAMS")) {
-                // obter todos os contactos
-                msg.tipo = msg.msg;
-                msg.msg = "DHPARAMS"; // email:nome:curso;
-                msg.destino = msg.emissor;
-                msg.emissor = serverName;
-                msg.aux1 = "" + dh.getParamG();
-                msg.aux2 = "" + dh.getParamP();
                 send(conn, gson.toJson(msg));
                 System.out.println(gson.toJson(msg));
             }
