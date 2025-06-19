@@ -1,21 +1,18 @@
 {
-  "edlima@uta.cv": {
-    "nome": "Elber Lima",
-    "email": "edlima@uta.cv",
-    "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
-    "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+  "milanka@uta.cv": {
+    "email": "milanka@uta.cv",
+    "pw": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "tokenDisp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJudWxsTWlsYW5rYSIsImlhdCI6MTc1MDMzODc4MCwiZXhwIjoxNzUwMzM4NzgwfQ.4GYOl6XSf6IcBmv3wpsJEKxmTTHh7d6E67u7S_eSWxw"
   },
-  "rhfortes@uta.cv": {
-    "nome": "Rodrigo Fortes",
-    "email": "rhfortes@uta.cv",
-    "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
-    "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+  "fdgomes@uta.cv": {
+    "email": "fdgomes@uta.cv",
+    "pw": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "tokenDisp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJudWxsRnJlZHkgQnJpdG8iLCJpYXQiOjE3NTAzMzk4NjQsImV4cCI6MTc1MDMzOTg2NH0.3Bjj7Qvpy1h-zvou_AZEWqkvCxz39Uxql2_elqxcZyI"
   },
-  "vokafor@uta.cv": {
-    "nome": "Vanessa Okafor",
-    "email": "vokafor@uta.cv",
-    "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
-    "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
+  "bob@uta.cv": {
+    "email": "bob@uta.cv",
+    "pw": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "tokenDisp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJudWxsQm9iIiwiaWF0IjoxNzUwMzUyNTM5LCJleHAiOjE3NTAzNTI1Mzl9.KtaftPi9zSWRfGiwahgUnbVr1hjZIsApFDaU00jG5ZU"
   },
   "gdluz@uta.cv": {
     "nome": "Gabriel da Luz",
