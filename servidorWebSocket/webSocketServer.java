@@ -7,28 +7,39 @@ import org.java_websocket.server.WebSocketServer;
 import com.google.gson.Gson;
 
 import java.net.InetSocketAddress;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
+import java.security.spec.X509EncodedKeySpec;
+import java.security.KeyFactory;
+import java.util.Base64;
 public class webSocketServer extends WebSocketServer {
+
+    private class UserSessao {
+    String email;
+    WebSocket client;
+    String sessaoToken;
+    PublicKey publicKey;  // chave pública do cliente
+}
+
 
     private String serverName = "ROOT";
 
     private DiffieHelman dh = new DiffieHelman();
 
-    private class UserSessao {
-        String email;
-        WebSocket client;
-        String sessaoToken;
-    }
 
-    private void addConexao(messagem msg, WebSocket conn) {
+
+    
+    private void addConexao(messagem msg, WebSocket conn, PublicKey clientPublicKey) {
         if (!msg.token.startsWith("00ERROR")) {
             UserSessao us = new UserSessao();
             us.email = msg.emissor;
             us.client = conn;
             us.sessaoToken = msg.token;
+            us.publicKey = clientPublicKey;  // guarda a chave pública aqui
 
             conexoes.add(us);
         }
@@ -51,7 +62,7 @@ public class webSocketServer extends WebSocketServer {
 
     List<UserSessao> conexoes = new ArrayList<>();
 
-    public webSocketServer(int port) {
+     public webSocketServer(int port) {
         super(new InetSocketAddress(port));
     }
 
@@ -80,11 +91,10 @@ public class webSocketServer extends WebSocketServer {
 
         // TODO: Decriptografar mensagem
         try {
-            message = Security_handler.decrypt(message);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    message = Security_handler.decryptWithPrivateKey(message);
+} catch (Exception e) {
+    e.printStackTrace();
+}
 
         // ao receber mensgem será em json
         // converter json para objeto mensagem
@@ -140,17 +150,24 @@ public class webSocketServer extends WebSocketServer {
         else if (msg.destino.equals("LoginService")) {
 
             if (msg.tipo.equals("Login")) {
+    PublicKey clientPublicKey = null;
+    try {
+        // Supondo que a chave pública vem em msg.aux1 (string Base64)
+        byte[] keyBytes = Base64.getDecoder().decode(msg.aux1);
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        clientPublicKey = kf.generatePublic(spec);
+    } catch (Exception e) {
+        e.printStackTrace();
+        // pode enviar erro ou abortar conexão
+    }
 
-                msg.token = users.autenticarUser(msg.emissor, msg.aux1);
-                msg.aux1 = users.getNome(msg.emissor); // TODO: depois tirar essa informação diretamente de
-                                                       // autenticarUser
-                /// caso o login der negativo, token.startsWith("00ERROR") == TRUE
-                // aqui pode se fazer log de quantas vezes foi feito o login na conta do usuario
-                // contagens de tentativa de iniciar a sessão etc...
+    msg.token = users.autenticarUser(msg.emissor, msg.aux1);
+    msg.aux1 = users.getNome(msg.emissor);
 
-                // adicionar conexao na lista de conexoes
-                addConexao(msg, conn);
-            }
+    addConexao(msg, conn, clientPublicKey);
+}
+
 
             else if (msg.tipo.equals("RetomarSessao")) {
                 // confirmar token dispositivo
@@ -158,7 +175,7 @@ public class webSocketServer extends WebSocketServer {
                 // caso o login der negativo, token.startsWith("00ERROR") == TRUE
 
                 // adicionar conexao na lista de conexoes
-                addConexao(msg, conn);
+                addConexao(msg, conn,null);
             }
 
             else if (msg.tipo.equals("Incricao")) {
@@ -256,11 +273,15 @@ public class webSocketServer extends WebSocketServer {
         System.out.println("Servidor WebSocket iniciado na porta " + getPort());
     }
 
-    public void send(WebSocket conn, String msg) {
+public void send(WebSocket conn, String msg) {
         try {
-            msg = Security_handler.encrypt(msg);
+            for (UserSessao us : conexoes) {
+                if (us.client == conn) {
+                    msg = Security_handler.encryptWithPublicKey(msg, us.publicKey);
+                    break;
+                }
+            }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         conn.send(msg);

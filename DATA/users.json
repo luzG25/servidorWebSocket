@@ -17,6 +17,16 @@
     "pw": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9",
     "tokenDisp": "c0fc3c713f09a43384ac08f7d91fca430dcbc6466fff9284ce4571bdc2c8f9f9"
   },
+  "teste@uta.cv": {
+    "email": "teste@uta.cv",
+    "pw": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "tokenDisp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJudWxsVGVzdGUiLCJpYXQiOjE3NTAzNDY2NDksImV4cCI6MTc1MDM0NjY0OX0.AX6g7GjPdIi_B2Xl1-Q5ffATbQFuU2r5Yzxdeaovst8"
+  },
+  "fdgomes@uta.cv": {
+    "email": "fdgomes@uta.cv",
+    "pw": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "tokenDisp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJudWxsRlJFRFkiLCJpYXQiOjE3NTAzNDM4NTQsImV4cCI6MTc1MDM0Mzg1NH0.EXFO4KQUQTCgkrIg3FUNNy_XJPEW6JXwh0vaWeLXkfs"
+  },
   "gdluz@uta.cv": {
     "nome": "Gabriel da Luz",
     "email": "gdluz@uta.cv",
