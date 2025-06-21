@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class tokenHandler {
 
-    private static final String SECRET_KEY = "CHATUTA"; // Troque pelo seu próprio segredo
+    private static final String SECRET_KEY = "CHATUTA"; 
 
     // Método para gerar um token JWT
     public static String generateToken(String subject, long expirationMillis) {
